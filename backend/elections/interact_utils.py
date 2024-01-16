@@ -12,7 +12,7 @@ with open(file_path) as f:
 abi = contract_json["abi"]
 
 # # Replace with the deployed contract address
-contract_address = "0x28da5C0Ec29ff96287CC3268A545414942d72522"
+contract_address = "0xb096176b053ab35cb5Bc35f2a291EbB80D4e08A7"
 
 contract = w3.eth.contract(address=contract_address, abi=abi)
 def get_vids():
@@ -30,7 +30,8 @@ def get_vote_count(contract_address):
         vote_counts = None
     return vote_counts
 
-def perform_vote(id):
+def perform_vote(contract_addre, id):
+    contract = w3.eth.contract(address=contract_address, abi=abi)
     vote_data = [0]*5
     vote_data[id] = 1
     print(vote_data)
@@ -43,7 +44,8 @@ def perform_vote(id):
     contract.functions.performVote(vote_data).transact(tx_object)
     print("Your vote is successfully counted\nHere is your VID:")
     print(vid.hex())
-    
+    return vid
+
 def submitKey(key):
     accounts = w3.eth.accounts
     tx_object = {

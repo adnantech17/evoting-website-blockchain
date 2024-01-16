@@ -1,5 +1,6 @@
 'use client'
 
+import { performVote } from 'client/elections'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
@@ -19,28 +20,12 @@ export default function Page({ params }: { params: { slug: string[] } }) {
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/vote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id,
-          fingerprint,
-        }),
-      })
-
+      const response = await performVote(params.slug, { username: id, password: fingerprint })
+      localStorage.setItem('user_data', JSON.stringify({ username: id, password: fingerprint }))
       router.push(`/election/vote/${params.slug}`)
-
-      // if (response.ok) {
-      //   setIsSuccess(true)
-      // } else {
-      //   const errorData = await response.json()
-      //   setErrorMessage(errorData.message || 'An error occurred while voting')
-      // }
     } catch (error) {
       console.error(error)
-      setErrorMessage('An error occurred. Please try again later.')
+      setErrorMessage(error.error)
     } finally {
       setIsLoading(false)
     }

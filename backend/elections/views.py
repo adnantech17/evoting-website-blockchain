@@ -5,6 +5,7 @@ from django.utils import timezone
 from .interact_utils import perform_vote, submitKey, get_vids, get_vote_count
 from rest_framework import status
 from .models import Election, Vote
+from users.models import User
 from .serializers import KeyDataSerializer, ElectionSerializer
 from django.contrib.auth import authenticate
 
@@ -27,23 +28,29 @@ class PerformVoteView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
 
-        id = int(request.data.get("id"))
+        id = request.data.get("id")
+        print(id)
+        try:
+            user = User.objects.get(username=username, password=password)
+        except:
+            return Response({"message": "User not found!", "success": False}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = authenticate(request, username=username, password=password)
-        if not user:
-            return Response({"message": "Invalid credentials", "success": False}, status=status.HTTP_401_UNAUTHORIZED)
-
-        if not id:
-            return Response({"message": "Ok", "success": True})
-
-        election = Election.objects.get(id=election_id)
         if Vote.objects.filter(user=user).exists():
             return Response({"message": "User already voted", "success": False}, status=status.HTTP_400_BAD_REQUEST)
 
+        if id is None:
+            return Response({"message": "Ok", "success": True})
+
+        id = int(id)
+
+        print(user, Vote.objects.all())
+
+        election = Election.objects.get(id=election_id)
+
         try:
-            perform_vote(election.contract_address, id)  # Call your Web3 function
+            vid = perform_vote(election.contract_address, id)  # Call your Web3 function
             Vote.objects.create(user=user, vote_done=True)
-            return Response({"message": "Vote successful", "success": True})
+            return Response({"message": "Vote successful", "vid": vid, "success": True})
         except Exception as e:
             return Response({"message": str(e), "success": False}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -91,6 +98,7 @@ class ElectionDetailView(APIView):
         try:
             election = Election.objects.get(pk=election_id)
             serializer = ElectionSerializer(election)
+            vote_count = None
             if election.end_date < timezone.now():
                 vote_count = get_vote_count(election.contract_address)
             return Response({'data': {"election": serializer.data, "vote_count": vote_count}, 'success': True})

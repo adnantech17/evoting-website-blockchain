@@ -116,6 +116,7 @@ export const Authors = defineDocumentType(() => ({
   contentType: 'mdx',
   fields: {
     name: { type: 'string', required: true },
+    second: { type: 'string' },
     avatar: { type: 'string' },
     occupation: { type: 'string' },
     company: { type: 'string' },

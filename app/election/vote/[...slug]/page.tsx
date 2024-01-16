@@ -1,22 +1,59 @@
+'use client'
+
+import { performVote } from 'client/elections'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const candidates = [
   {
+    id: 0,
     name: 'Candidate 1',
     image: 'https://picsum.photos/id/237/100/100',
   },
   {
+    id: 1,
     name: 'Candidate 2',
     image: 'https://picsum.photos/id/91/100/100',
   },
   {
+    id: 2,
     name: 'Candidate 3',
     image: 'https://picsum.photos/id/64/100/100',
   },
+  {
+    id: 3,
+    name: 'Candidate 4',
+    image: 'https://picsum.photos/id/219/100/100',
+  },
+  {
+    id: 4,
+    name: 'Candidate 5',
+    image: 'https://picsum.photos/id/453/100/100',
+  },
 ]
 
-export default function VotePage() {
+export default function VotePage({ params }: { params: { slug: string[] } }) {
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+
+  const handleVote = async (id) => {
+    setIsLoading(true)
+    try {
+      const response = await performVote(params.slug, {
+        ...JSON.parse(localStorage.getItem('user_data') || '{}'),
+        id,
+      })
+      console.log(response.data)
+      localStorage.setItem('vid', response.data.vid)
+      router.push(`/election/vote-success/${params.slug}`)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   return (
     <div className="container mx-auto p-4">
       <Head>
@@ -39,7 +76,10 @@ export default function VotePage() {
               />
               <h3 className="text-lg font-bold">{candidate.name}</h3>
             </div>
-            <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
+            <button
+              onClick={() => handleVote(candidate.id)}
+              className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+            >
               Vote
             </button>
           </div>

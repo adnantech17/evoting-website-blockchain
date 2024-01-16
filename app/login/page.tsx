@@ -1,7 +1,10 @@
 'use client'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import {login} from '../../client/auth'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -15,26 +18,12 @@ export default function LoginPage() {
 
     try {
       // Perform login logic here (e.g., call an API)
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      })
-
-      if (response.ok) {
-        // Handle successful login (e.g., store token, redirect)
-      } else {
-        const errorData = await response.json()
-        setErrorMessage(errorData.message || 'Invalid email or password')
-      }
+      const response = await login({username: email, password: password})
+      localStorage.setItem('TOKEN', response.data.token)
+      router.push('/')
     } catch (error) {
       console.error(error)
-      setErrorMessage('An error occurred. Please try again later.')
+      setErrorMessage('Username or password do not match.')
     } finally {
       setIsLoading(false)
     }
@@ -54,7 +43,7 @@ export default function LoginPage() {
             Email
           </label>
           <input
-            type="email"
+            type="text"
             id="email"
             name="email"
             value={email}
