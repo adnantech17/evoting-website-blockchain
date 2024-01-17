@@ -21,7 +21,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
           <p> Have a great day! </p>
           <div className="py-10 text-center">
             <Link
-              href={`/election/vote/${params.slug}`}
+              href={`/election/verify/${params.slug}`}
               className="bg-indigo-600 px-12 py-3 font-semibold text-white hover:bg-indigo-500"
             >
               GO BACK
