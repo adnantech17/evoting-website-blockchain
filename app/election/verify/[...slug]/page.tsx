@@ -76,7 +76,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
           disabled={isLoading}
           className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-500 focus:outline-none"
         >
-          {isLoading ? 'Voting...' : 'Cast Vote'}
+          {isLoading ? 'Verifying...' : 'Verify'}
         </button>
       </form>
     </div>

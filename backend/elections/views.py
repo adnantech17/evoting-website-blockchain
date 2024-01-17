@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .interact_key_utils import get_key
 from django.utils import timezone
-from .interact_utils import perform_vote, submitKey, get_vids, get_vote_count
+from .interact_utils import perform_vote, submit_key, get_vids, get_vote_count
 from rest_framework import status
 from .models import Election, Vote
 from users.models import User
@@ -49,8 +49,8 @@ class PerformVoteView(APIView):
 
         try:
             vid = perform_vote(election.contract_address, id)  # Call your Web3 function
-            Vote.objects.create(user=user, vote_done=True)
-            return Response({"message": "Vote successful", "vid": vid, "success": True})
+            # Vote.objects.create(user=user, vote_done=True)
+            return Response({"message": "Vote successful", "vid": str(vid), "success": True})
         except Exception as e:
             return Response({"message": str(e), "success": False}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -65,19 +65,18 @@ class SubmitKeyView(APIView):
         election = Election.objects.get(id=election_id)
         contract_address = election.contract_address
 
-        user = request.user
         key = serializer.validated_data['key']
 
         try:
-            submitKey(contract_address, key)  # Call your Web3 function
-            Vote.objects.create(user=user, vote_done=True)  # Assuming key submission marks a vote
+            print(contract_address, int(key))
+            submit_key(contract_address, int(key))  # Call your Web3 function
             return Response({"message": "Key submitted successfully", "success": True})
         except Exception as e:
+            print(e)
             return Response({"error": str(e), "success": False}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class GetVIDsView(APIView):
-
     def get(self, request, election_id):
         election = Election.objects.get(id=election_id)
         contract_address = election.contract_address

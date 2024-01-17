@@ -12,7 +12,9 @@ import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { LoginContext } from 'context/LoginContext'
+import { ToastContainer } from 'react-toastify'
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -22,6 +24,21 @@ const space_grotesk = Space_Grotesk({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
+  const [loggedIn, setLoggedIn] = useState<boolean>(false)
+
+  const handleLogin = () => {
+    setLoggedIn(true)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('TOKEN')
+    setLoggedIn(false)
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('TOKEN')) handleLogin()
+  }, [])
+
   return (
     <html
       lang={siteMetadata.language}
@@ -39,18 +56,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
       <body className="bg-white text-black antialiased dark:bg-gray-950 dark:text-white">
         <ThemeProviders>
-          <QueryClientProvider client={queryClient}>
-            <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
-            <SectionContainer>
-              <div className="flex h-screen flex-col justify-between font-sans">
-                <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-                  <Header />
-                  <main className="mb-auto">{children}</main>
-                </SearchProvider>
-                <Footer />
-              </div>
-            </SectionContainer>
-          </QueryClientProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
+          <LoginContext.Provider value={{ loggedIn, setLoggedIn, handleLogin, handleLogout }}>
+            <QueryClientProvider client={queryClient}>
+              <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
+              <SectionContainer>
+                <div className="flex h-screen flex-col justify-between font-sans">
+                  <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
+                    <Header />
+                    <main className="mb-auto">{children}</main>
+                  </SearchProvider>
+                  <Footer />
+                </div>
+              </SectionContainer>
+            </QueryClientProvider>
+          </LoginContext.Provider>
         </ThemeProviders>
       </body>
     </html>

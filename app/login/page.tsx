@@ -1,7 +1,8 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {login} from '../../client/auth'
+import { login } from '../../client/auth'
+import { LoginContext } from 'context/LoginContext'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { handleLogin } = useContext(LoginContext)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -18,8 +20,9 @@ export default function LoginPage() {
 
     try {
       // Perform login logic here (e.g., call an API)
-      const response = await login({username: email, password: password})
+      const response = await login({ username: email, password: password })
       localStorage.setItem('TOKEN', response.data.token)
+      handleLogin()
       router.push('/')
     } catch (error) {
       console.error(error)

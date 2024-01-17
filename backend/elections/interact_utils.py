@@ -30,7 +30,7 @@ def get_vote_count(contract_address):
         vote_counts = None
     return vote_counts
 
-def perform_vote(contract_addre, id):
+def perform_vote(contract_address, id):
     contract = w3.eth.contract(address=contract_address, abi=abi)
     vote_data = [0]*5
     vote_data[id] = 1
@@ -46,7 +46,8 @@ def perform_vote(contract_addre, id):
     print(vid.hex())
     return vid
 
-def submitKey(key):
+def submit_key(contract_address, key):
+    contract = w3.eth.contract(address=contract_address, abi=abi)
     accounts = w3.eth.accounts
     tx_object = {
         "from": accounts[1],

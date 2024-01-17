@@ -29,3 +29,13 @@ export const performVote: any = async (id: number | string, data: any) => {
   })
   return resp
 }
+
+export const submitKey: any = async (id: number | string, data: any) => {
+  const endpoint = `elections/submit-key/${id}/`
+  const resp = await apiClient({
+    method: 'POST',
+    endpoint: endpoint,
+    data: data,
+  })
+  return resp
+}

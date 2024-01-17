@@ -79,50 +79,53 @@ export default function Page({ params }: { params: { slug: string[] } }) {
         </div>
       ) : (
         <div>
-          {dayjs(election?.data?.election?.end_date).isBefore(dayjs()) && (
-            <>
-              <h1 className="m-4 text-2xl font-bold">Result</h1>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {candidates.map((candidate) => (
-                  <div
-                    key={candidate.name}
-                    className="flex items-center justify-between rounded-lg border p-4"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={candidate.image}
-                        alt={candidate.name}
-                        width={100}
-                        height={100}
-                        className="mb-4 rounded-full"
-                      />
-                      <h3 className="text-lg font-bold">{candidate.name}</h3>
+          {dayjs(election?.data?.election?.end_date).isBefore(dayjs()) &&
+            election?.data?.vote_count && (
+              <>
+                <h1 className="m-4 text-2xl font-bold">Result</h1>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {candidates.map((candidate, idx: number) => (
+                    <div
+                      key={candidate.name}
+                      className="flex items-center justify-between rounded-lg border p-4"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src={candidate.image}
+                          alt={candidate.name}
+                          width={100}
+                          height={100}
+                          className="mb-4 rounded-full"
+                        />
+                        <h3 className="text-lg font-bold">{candidate.name}</h3>
+                      </div>
+                      <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
+                        {election?.data?.vote_count?.[idx]} Votes
+                      </button>
                     </div>
-                    <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
-                      {candidate.votes} Votes
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-          <div className="mt-5 flex items-center justify-between">
-            {!dayjs(election?.data?.election?.end_date).isBefore(dayjs()) ? (
-              <Link
-                className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                href={`/election/verify/${params.slug}`}
-              >
-                Go to Vote Page
-              </Link>
-            ) : (
-              <Link
-                className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                href={`/election/submit-key/${params.slug}`}
-              >
-                Submit Key
-              </Link>
+                  ))}
+                </div>
+              </>
             )}
-          </div>
+          {!election?.data?.vote_count && (
+            <div className="mt-5 flex items-center justify-between">
+              {!dayjs(election?.data?.election?.end_date).isBefore(dayjs()) ? (
+                <Link
+                  className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                  href={`/election/verify/${params.slug}`}
+                >
+                  Go to Vote Page
+                </Link>
+              ) : (
+                <Link
+                  className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                  href={`/election/submit-key/${params.slug}`}
+                >
+                  Submit Key
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -4305,6 +4305,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"clsx@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "clsx@npm:2.1.0"
+  checksum: 43fefc29b6b49c9476fbce4f8b1cc75c27b67747738e598e6651dd40d63692135dc60b18fa1c5b78a2a9ba8ae6fd2055a068924b94e20b42039bd53b78b98e1d
+  languageName: node
+  linkType: hard
+
 "color-convert@npm:^1.9.0":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
@@ -9658,6 +9665,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-toastify@npm:^10.0.3":
+  version: 10.0.3
+  resolution: "react-toastify@npm:10.0.3"
+  dependencies:
+    clsx: ^2.1.0
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 270bbcd10893e3b9e9f06c69a250785689dc016aff9a7b095baef018a7604377377afc94fd07ff3f01f825e1f20050061a29bb4a41b973249d0b01692fd83ff5
+  languageName: node
+  linkType: hard
+
 "react-virtual@npm:^2.8.2":
   version: 2.10.4
   resolution: "react-virtual@npm:2.10.4"
@@ -11135,6 +11154,7 @@ __metadata:
     react-dom: 18.2.0
     react-icons: ^5.0.1
     react-query: ^3.39.3
+    react-toastify: ^10.0.3
     reading-time: 1.5.0
     rehype-autolink-headings: ^6.1.0
     rehype-citation: ^1.0.2
