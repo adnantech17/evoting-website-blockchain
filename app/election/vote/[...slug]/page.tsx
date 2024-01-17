@@ -45,8 +45,7 @@ export default function VotePage({ params }: { params: { slug: string[] } }) {
         ...JSON.parse(localStorage.getItem('user_data') || '{}'),
         id,
       })
-
-      localStorage.setItem('vid', String.fromCharCode(response.data.vid))
+      localStorage.setItem('vid', response.data.vid)
       router.push(`/election/vote-success/${params.slug}`)
     } catch (error) {
       console.error(error)

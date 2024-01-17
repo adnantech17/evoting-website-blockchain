@@ -52,8 +52,8 @@ class PerformVoteView(APIView):
 
         try:
             vid = perform_vote(election.contract_address, id)  # Call your Web3 function
-            Vote.objects.create(user=user, vote_done=True)
-            return Response({"message": "Vote successful", "vid": str(vid), "success": True})
+            # Vote.objects.create(user=user, vote_done=True)
+            return Response({"message": "Vote successful", "vid": vid, "success": True})
         except Exception as e:
             return Response({"message": str(e), "success": False}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
