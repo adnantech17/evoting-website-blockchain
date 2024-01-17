@@ -14,14 +14,15 @@ export default function Page({ params }: { params: { slug: string[] } }) {
           ></path>
         </svg>
         <div className="text-center">
-          <h3 className="text-center text-base font-semibold md:text-2xl">Vote Success!</h3>
-          <p className="my-2 text-gray-600">Thank you for completing your vote.</p>
-          <p className="my-2 text-gray-600">Your VID is:</p>
-          <p className="my-2 text-gray-600">{localStorage.getItem('vid')}</p>
+          <h3 className="text-center text-base font-semibold md:text-2xl">Success!</h3>
+          <p className="my-2 text-gray-600">Thank you for being with us.</p>
+          <p className="my-2 text-gray-600">
+            Here is your share of key: {localStorage.getItem('key')}
+          </p>
           <p> Have a great day! </p>
           <div className="py-10 text-center">
             <Link
-              href={`/election/vote/${params.slug}`}
+              href={`/election/${params.slug}`}
               className="bg-indigo-600 px-12 py-3 font-semibold text-white hover:bg-indigo-500"
             >
               GO BACK

@@ -8,19 +8,23 @@ from .models import Election, Vote
 from users.models import User
 from .serializers import KeyDataSerializer, ElectionSerializer
 from django.contrib.auth import authenticate
+from random import *
 
 # Create your views here.
 class GetKeyView(APIView):
-    def get(self, request, election_id):
+    def post(self, request, election_id):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
         try:
-            election = Election.objects.get(id=election_id)
-            contract_address = election.contract_address
-            key_data = get_key(contract_address)
-            serializer = KeyDataSerializer(data=key_data)
-            serializer.is_valid(raise_exception=True)
-            return Response({"data": serializer.data, "success": True})
-        except Election.DoesNotExist:
-            return Response({"message": "Election not found", "success": False}, status=status.HTTP_404_NOT_FOUND)
+            user = User.objects.get(username=username, password=password)
+        except:
+            return Response({"message": "User not found!", "success": False}, status=status.HTTP_400_BAD_REQUEST)
+
+        if user.is_staff:
+            return Response({"data": randint(1, 5) * 512345, "success": True})
+        
+        return Response({"message": "Sorry! You are not permitted to do so.", "success": False}, status=status.HTTP_403_FORBIDDEN)
 
 
 class PerformVoteView(APIView):
@@ -29,7 +33,6 @@ class PerformVoteView(APIView):
         password = request.data.get('password')
 
         id = request.data.get("id")
-        print(id)
         try:
             user = User.objects.get(username=username, password=password)
         except:
@@ -82,7 +85,7 @@ class GetVIDsView(APIView):
         contract_address = election.contract_address
         try:
             vids = get_vids(contract_address)
-            return Response({"vids": vids, "success": True})
+            return Response({"data": vids, "success": True})
         except Exception as e:
             return Response({"error": str(e), "success": False}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

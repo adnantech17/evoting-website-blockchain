@@ -117,12 +117,20 @@ export default function Page({ params }: { params: { slug: string[] } }) {
                   Go to Vote Page
                 </Link>
               ) : (
-                <Link
-                  className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                  href={`/election/submit-key/${params.slug}`}
-                >
-                  Submit Key
-                </Link>
+                <>
+                  <Link
+                    className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                    href={`/election/submit-key/${params.slug}`}
+                  >
+                    Submit Key
+                  </Link>
+                  <Link
+                    className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                    href={`/election/get-key/${params.slug}`}
+                  >
+                    Get Key
+                  </Link>
+                </>
               )}
             </div>
           )}

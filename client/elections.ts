@@ -11,6 +11,16 @@ export const getElections: any = async () => {
   return resp
 }
 
+export const getVids: any = async () => {
+  const endpoint = `elections/get-vids/`
+  const resp = await apiClient({
+    method: 'GET',
+    endpoint: endpoint,
+    headers: { Authorization: undefined },
+  })
+  return resp
+}
+
 export const getElectionDetails: any = async (id: number | string) => {
   const endpoint = `elections/get-elections/${id}/`
   const resp = await apiClient({
@@ -22,6 +32,15 @@ export const getElectionDetails: any = async (id: number | string) => {
 
 export const performVote: any = async (id: number | string, data: any) => {
   const endpoint = `elections/perform-vote/${id}/`
+  const resp = await apiClient({
+    method: 'POST',
+    endpoint: endpoint,
+    data: data,
+  })
+  return resp
+}
+export const getKey: any = async (id: number | string, data: any) => {
+  const endpoint = `elections/get-key/${id}/`
   const resp = await apiClient({
     method: 'POST',
     endpoint: endpoint,
