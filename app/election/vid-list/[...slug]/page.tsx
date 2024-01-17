@@ -10,7 +10,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
 
   const { data: vids } = useQuery({
     queryKey: ['vids'],
-    queryFn: () => getVids(),
+    queryFn: () => getVids(params.slug),
   })
 
   return (
@@ -19,7 +19,7 @@ export default function Page({ params }: { params: { slug: string[] } }) {
         <div className="">
           <h3 className="text-base font-semibold md:text-2xl">VID List</h3>
           <ul>
-            {vids?.data?.data?.map((id, idx) => (
+            {vids?.data?.map((id, idx) => (
               <li key={id} className="mt-1 text-gray-500 hover:text-gray-400">
                 {idx + 1}. {id}
               </li>

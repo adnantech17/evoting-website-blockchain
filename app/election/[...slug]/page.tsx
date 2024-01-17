@@ -82,7 +82,15 @@ export default function Page({ params }: { params: { slug: string[] } }) {
           {dayjs(election?.data?.election?.end_date).isBefore(dayjs()) &&
             election?.data?.vote_count && (
               <>
-                <h1 className="m-4 text-2xl font-bold">Result</h1>
+                <div className="flex items-center justify-between">
+                  <h1 className="m-4 text-2xl font-bold">Result</h1>
+                  <Link
+                    className="h-9 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                    href={`/election/vid-list/${params.slug}`}
+                  >
+                    VID List
+                  </Link>
+                </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {candidates.map((candidate, idx: number) => (
                     <div

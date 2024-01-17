@@ -15,7 +15,8 @@ abi = contract_json["abi"]
 contract_address = "0xb096176b053ab35cb5Bc35f2a291EbB80D4e08A7"
 
 contract = w3.eth.contract(address=contract_address, abi=abi)
-def get_vids():
+def get_vids(contract_address):
+    contract = w3.eth.contract(address=contract_address, abi=abi)
     vids = contract.functions.getVIDs().call()
     arr = []
     for vid in vids:
@@ -44,7 +45,7 @@ def perform_vote(contract_address, id):
     contract.functions.performVote(vote_data).transact(tx_object)
     print("Your vote is successfully counted\nHere is your VID:")
     print(vid.hex())
-    return vid
+    return vid.hex()
 
 def submit_key(contract_address, key):
     contract = w3.eth.contract(address=contract_address, abi=abi)

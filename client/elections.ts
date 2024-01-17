@@ -11,8 +11,8 @@ export const getElections: any = async () => {
   return resp
 }
 
-export const getVids: any = async () => {
-  const endpoint = `elections/get-vids/`
+export const getVids: any = async (id: number) => {
+  const endpoint = `elections/get-vids/${id}/`
   const resp = await apiClient({
     method: 'GET',
     endpoint: endpoint,
